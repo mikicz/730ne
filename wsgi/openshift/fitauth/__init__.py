@@ -1,5 +1,5 @@
 import json
-from social.backends.oauth import BaseOAuth2
+from social_core.backends.oauth import BaseOAuth2
 
 
 class FITOAuth2(BaseOAuth2):

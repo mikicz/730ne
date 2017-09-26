@@ -79,7 +79,7 @@
     <a  class="btn btn-xs btn-danger" href="/logout/">Odhlásit</a></p>
 
     {% if user.signature.signed %}
-    <p>Děkujeme za vaši podporu. Pokud byste si to přál(a), kdykoliv se sem můžete vrátit, přihlásit se a <a href="{% url 'views.toggle' %}">svou podporu zrušit</a>, ačkoli byste nás tím velice zarmoutil(a).</p>
+    <p>Děkujeme za vaši podporu. Pokud byste si to přál(a), kdykoliv se sem můžete vrátit, přihlásit se a <a href="{% url 'toggle' %}">svou podporu zrušit</a>, ačkoli byste nás tím velice zarmoutil(a).</p>
 
     <p>Pomozte nám 730ne rozšířit:</p>
     <p>
@@ -94,7 +94,7 @@
       {% endif %}
 
     {% else %}
-    <p><a href="{% url 'views.toggle' %}" class="btn btn-lg btn-primary">Podpořit</a></p>
+    <p><a href="{% url 'toggle' %}" class="btn btn-lg btn-primary">Podpořit</a></p>
     {% endif %}
     
     

@@ -14,3 +14,5 @@ dist/
 build/
 *.sqlite3
 auth.conf
+.idea
+local_settings.py
