@@ -10,16 +10,10 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import imp
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
-ON_OPENSHIFT = False
-if 'OPENSHIFT_REPO_DIR' in os.environ:
-    ON_OPENSHIFT = True
-    AUTH_FILE = os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'auth.conf')
-else:
-    AUTH_FILE = os.path.join(BASE_DIR, 'auth.conf')
+AUTH_FILE = os.path.join(BASE_DIR, 'auth.conf')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -27,18 +21,11 @@ else:
 # SECURITY WARNING: keep the secret key used in production secret!
 default_keys = {'SECRET_KEY': 'tjy&7h%c=q01+c5i@_-t)&n2c+y*tn7v_)vbdksnlv@s5qh%e_'}
 use_keys = default_keys
-if ON_OPENSHIFT:
-    imp.find_module('openshiftlibs')
-    import openshiftlibs
-    use_keys = openshiftlibs.openshift_secure(default_keys)
 
 SECRET_KEY = use_keys['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if ON_OPENSHIFT:
-    DEBUG = False
-else:
-    DEBUG = True
+DEBUG = True
 
 if DEBUG:
     ALLOWED_HOSTS = []
@@ -74,33 +61,7 @@ MIDDLEWARE = (
     'social_django.middleware.SocialAuthExceptionMiddleware',
 )
 
-# If you want configure the REDISCLOUD
-if 'REDISCLOUD_URL' in os.environ \
-   and 'REDISCLOUD_PORT' in os.environ and 'REDISCLOUD_PASSWORD' in os.environ:
-    redis_server = os.environ['REDISCLOUD_URL']
-    redis_port = os.environ['REDISCLOUD_PORT']
-    redis_password = os.environ['REDISCLOUD_PASSWORD']
-    CACHES = {
-        'default': {
-            'BACKEND': 'redis_cache.RedisCache',
-            'LOCATION': '%s:%d' % (redis_server, int(redis_port)),
-            'OPTIONS': {
-                'DB': 0,
-                'PARSER_CLASS': 'redis.connection.HiredisParser',
-                'PASSWORD': redis_password,
-            }
-        }
-    }
-    MIDDLEWARE_CLASSES = ('django.middleware.cache.UpdateCacheMiddleware',) + \
-        MIDDLEWARE_CLASSES + \
-        ('django.middleware.cache.FetchFromCacheMiddleware',)
-
-
 ROOT_URLCONF = 'urls'
-
-if ON_OPENSHIFT:
-    WSGI_APPLICATION = 'wsgi.application'
-
 
 TEMPLATES = [
     {
@@ -123,24 +84,12 @@ TEMPLATES = [
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-if ON_OPENSHIFT:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ['OPENSHIFT_APP_NAME'],
-            'USER': os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME'],
-            'PASSWORD': os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD'],
-            'HOST': os.environ['OPENSHIFT_POSTGRESQL_DB_HOST'],
-            'PORT': os.environ['OPENSHIFT_POSTGRESQL_DB_PORT'],
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
+}
 
 # Social auth
 AUTHENTICATION_BACKENDS = (

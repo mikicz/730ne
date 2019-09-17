@@ -7,10 +7,6 @@ packages = [
     'social-auth-app-django==1.2.0',
 ]
 
-if 'REDISCLOUD_URL' in os.environ \
-   and 'REDISCLOUD_PORT' in os.environ and 'REDISCLOUD_PASSWORD' in os.environ:
-    packages.append('django-redis-cache')
-    packages.append('hiredis')
 
 setup(name='730ne.cz', version='1.0',
       description='OpenShift Python-3.3 / Django-1.6 Community Cartridge based application',
