@@ -4,7 +4,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
-from django.template import RequestContext
 
 from signatures import models
 from fitauth import get_roles
@@ -41,7 +40,7 @@ def home(request):
         'teacher': teacher,
         'signatures': signatures,
         'total': total,
-    }, RequestContext(request))
+    })
 
 
 @login_required
